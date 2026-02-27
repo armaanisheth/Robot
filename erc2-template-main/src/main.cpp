@@ -1,6 +1,7 @@
 #include <FEHLCD.h>
 #include <FEHIO.h>
 #include <FEHSD.h>
+#include <Arduino.h>
 #include <FEHMotor.h>
 #include <FEHUtility.h>
 
@@ -11,6 +12,10 @@ AnalogInputPin left_opto(FEHIO::Pin10);
 
 FEHMotor right_motor(FEHMotor::Motor0, 9.0);
 FEHMotor left_motor(FEHMotor::Motor1, 9.0);
+
+void turn_right(int percent, int counts);
+void turn_left(int percent, int counts);
+void drive_forward(int percent, int counts);
 
 
 enum LineStates {
@@ -280,5 +285,93 @@ void ERCMain()
         Sleep(0.01);
 
 
-    }  
+    }
+//     void ERCMain()
+// {
+//     // float lowthreshold = //LOW NUM
+//     // float highthreshold = //HIGH NUM
+
+//     //Setting thresholds to the left encoder
+//     // left_encoder.SetThresholds(lowthreshold, highthreshold);
+//     // right_encoder.SetThresholds(lowthreshold, highthreshold);
+
+//     // 1. Drive 14 inches (14 inches * 40 counts/inch = 560 counts)
+//     drive_forward(40, 560);
+//     Sleep(1.0);
+
+//     // 2. Turn left 90 degrees
+//     // You will need to use trial and error to find the correct counts for a 90-degree turn
+//     turn_left(40, 200); // 200 is just a placeholder guess!
+//     Sleep(1.0);
+
+//     // 3. Drive 10 inches (10 * 40 = 400 counts)
+//     drive_forward(40, 400);
+//     Sleep(1.0);
+
+//     // 4. Turn right 90 degrees
+//     turn_right(40, 200); // Placeholder guess!
+//     Sleep(1.0);
+
+//     // 5. Drive 4 inches (4 * 40 = 162 counts)
+//     drive_forward(40, 160);
+// }
+
+void drive_forward(int percent, int counts)
+{
+    // Reset encoder counts
+    right_encoder.ResetCounts();
+    left_encoder.ResetCounts();
+
+    right_motor.SetPercent(percent);
+    left_motor.SetPercent(percent);
+
+    // Keep running until the average counts reach the target
+    while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
+       // Keep running
+    }
+
+    // Turn off motors  
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
+void turn_right(int percent, int counts) //using encoders
+{
+    //Reset encoder counts
+    right_encoder.ResetCounts();
+    left_encoder.ResetCounts();
+
+    right_motor.SetPercent(-percent);
+    left_motor.SetPercent(percent);
+
+    //While the average of the left and right encoder is less than counts, keep running motors
+    while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
+       //keep running
+    }
+
+    //Turn off motors
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
+void turn_left(int percent, int counts) //using encoders
+{
+    //Reset encoder counts
+    right_encoder.ResetCounts();
+    left_encoder.ResetCounts();
+
+    //Set both motors to desired percent
+    right_motor.SetPercent(percent);
+    left_motor.SetPercent(-percent);
+
+    //While the average of the left and right encoder is less than counts, keep running motors
+    while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
+        //keep running
+    }
+
+    //Turn off motors
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
 }
