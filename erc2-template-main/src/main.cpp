@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <FEHMotor.h>
 #include <FEHUtility.h>
+#include <Encoder.h>
 
 // Declarations for analog optosensors
 AnalogInputPin right_opto(FEHIO::Pin8);
@@ -12,6 +13,9 @@ AnalogInputPin left_opto(FEHIO::Pin10);
 
 FEHMotor right_motor(FEHMotor::Motor0, 9.0);
 FEHMotor left_motor(FEHMotor::Motor1, 9.0);
+
+DigitalEncoder left_encoder(FEHIO::Pin9);
+DigitalEncoder right_encoder(FEHIO::Pin8);
 
 void turn_right(int percent, int counts);
 void turn_left(int percent, int counts);
@@ -286,8 +290,34 @@ void ERCMain()
         Sleep(0.01);
         // Abhi Kanakia
 
+        // float lowthreshold = LOW;
+        // float highthreshold = HIGH;
 
+
+        // left_encoder.SetThresholds(lowthreshold, highthreshold);
+        // right_encoder.SetThresholds(lowthreshold, highthreshold);
+
+        // 1. Drive 14 inches (14 inches * 40 counts/inch = 560 counts)
+        drive_forward(40, 560);
+        Sleep(1.0);
+
+        // 2. Turn left 90 degrees
+        // You will need to use trial and error to find the correct counts for a 90-degree turn
+        turn_left(40, 200); // 200 is just a placeholder guess!
+        Sleep(1.0);
+
+        // 3. Drive 10 inches (10 * 40 = 400 counts)
+        drive_forward(40, 400);
+        Sleep(1.0);
+
+        // 4. Turn right 90 degrees
+        turn_right(40, 200); // Placeholder guess!
+        Sleep(1.0);
+
+        // 5. Drive 4 inches (4 * 40 = 162 counts)
+        drive_forward(40, 160);
     }
+}
 //     void ERCMain()
 // {
 //     // float lowthreshold = //LOW NUM
@@ -374,6 +404,4 @@ void turn_left(int percent, int counts) //using encoders
     //Turn off motors
     right_motor.Stop();
     left_motor.Stop();
-}
-
 }
