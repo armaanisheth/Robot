@@ -367,34 +367,21 @@ void drive_forward(int percent, int counts)
     left_motor.Stop();
 }
 
-void turn_right(int percent, int counts) //using encoders
+void turn(int percent, int counts, String direction) //using encoders
 {
     //Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
 
-    right_motor.SetPercent(-percent);
-    left_motor.SetPercent(percent);
-
-    //While the average of the left and right encoder is less than counts, keep running motors
-    while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
-       //keep running
+    //determine direction
+    if (direction.equals("left")) {
+        //Set both motors to desired percent
+        right_motor.SetPercent(percent);
+        left_motor.SetPercent(-percent);
+    } else {
+        right_motor.SetPercent(-percent);
+        left_motor.SetPercent(percent);
     }
-
-    //Turn off motors
-    right_motor.Stop();
-    left_motor.Stop();
-}
-
-void turn_left(int percent, int counts) //using encoders
-{
-    //Reset encoder counts
-    right_encoder.ResetCounts();
-    left_encoder.ResetCounts();
-
-    //Set both motors to desired percent
-    right_motor.SetPercent(percent);
-    left_motor.SetPercent(-percent);
 
     //While the average of the left and right encoder is less than counts, keep running motors
     while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
