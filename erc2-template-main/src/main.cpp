@@ -6,6 +6,8 @@
 #include <FEHUtility.h>
 #include <Encoder.h>
 
+AnalogInputPin cds(FEHIO::Pin4);
+
 FEHMotor right_motor(FEHMotor::Motor0, 9.0);
 DigitalEncoder right_encoder(FEHIO::Pin8);
 
@@ -16,43 +18,205 @@ FEHMotor front_motor(FEHMotor::Motor2, 9.0);
 DigitalEncoder front_encoder(FEHIO::Pin11);
 
 void drive_forward(int percent, int counts);
-void turn(int percent, int counts, char direction);
-void sideways(int percent, int counts, char direction);
+void strafing(int percent, int counts, char direction);
+void spinInPlace(int percent, int degrees, char direction);
 
 void ERCMain()
 {
-    
+    //read in the start line and begin driving
+    //default 30 sec wait time, if light is not read
+    int count = 0;
+    float volt = cds.Value();
+    //print wait message
+    LCD.Write("Waiting for start light ");
+    //read starting voltage and continuous volt updates until a light source is read
+    while (volt > 0.6  && count < 300) {
+       volt = cds.Value();
+       Sleep(0.1);
+       count++;
+    }
+    //print starting message
+    LCD.Write("Starting...");
+   
+    //drive backward to hit the final button
+    drive_forward(-30, 90); //change counts
     Sleep(1.0);
+
     // 35.7143 Counts/ Inch
-    // First part (right to left)
-    drive_forward(30, 1000);
-    Sleep(2.0);
-    drive_forward(-30, 1000);
-    Sleep(2.0);
+    // Driving around 4 inches forward
+    drive_forward(30, 245); //adjust
+    Sleep(1.0);
 
-    char direction = 'r';
-    turn(20, 280, direction);
-    Sleep(2.0);
+    // rotate 45 degrees to the right (20 for percent always)
+    spinInPlace(20, 45, 'r');
+    Sleep(1.0);
+
+    // Driving around 9 inches backwards
+    drive_forward(-30, 320); //adjust
+    Sleep(1.0);
+
+    // Driving around 6 inches forward 
+    drive_forward(30, 215); 
+    Sleep(1.0);
+
+
+    // strafe 6.5 inches right
+    strafing(20, 230, 'r');
+    Sleep(1.0);
+   
+    // 35.7143 Counts/ Inch
+    // Driving around 35-40 inches forward up the ramp
+    drive_forward(30, 1343); 
+    Sleep(1.0);
+
+    // rotate 90 degrees to the left (20 for percent always)
+    spinInPlace(20, 90, 'l');
+    Sleep(1.0);
+
+    // drive backwards to set ourselves up
+    drive_forward(-30, 275); //adjust
+    Sleep(1.0);
+
+    // drive forward to a point
+    drive_forward(30, 525); //adjust
+    Sleep(1.0);
+
+    // rotate 90 degrees to the left (20 for percent always)
+    spinInPlace(20, 90, 'l');
+    Sleep(1.0);
+
+    // drive forward to window
+    drive_forward(30, 200); //adjust
+    Sleep(1.0);
+
+    // strafe 8 ish inches right
+    strafing(20, 290, 'r');
+    Sleep(1.0);
+
+    // drive backwards an inch
+    drive_forward(-30, 40); //adjust
+    Sleep(1.0);
+
+    // strafe 1.5 ish inches right
+    strafing(20, 66, 'r');
+    Sleep(1.0);
     
-    // 35.7143 * 8 inches = 285
-    sideways(30, 285, 'r');
-    Sleep(2.0);
+    // drive forwards an inch
+    drive_forward(30, 40); //adjust
+    Sleep(1.0);
+
+    // strafe 8 ish inches left
+    strafing(20, 275, 'l');
+    Sleep(1.0);
+
+    // drive backwards from the window
+    drive_forward(-30, 200); //adjust
+    Sleep(1.0);
+
+    // rotate 90 degrees to the right (20 for percent always)
+    spinInPlace(20, 90, 'r');
+    Sleep(1.0);
 
 
-    // For the second part of Milestone 1.
-    // Driving around 35-40 inches forward, and backwards
-    drive_forward(30, 1200);
-    Sleep(2.0);
-    drive_forward(-20, 1000);
 
+    //attempt to read blue or red light value from the cds cell sensor
+    //print message to the screen
+    // String light;
+    // volt = cds.Value();
+    // count = 0;
+    // while (!light.equals("blue") && !light.equals("red")) {
+    //    volt = cds.Value();
+    //    Sleep(0.1);
+    //    count++;
+    //    if (volt > 0.3 && volt < 0.6) {
+    //         light = "blue";
+    //         LCD.Write(light);
+    //    }
+    //    else if (volt < 0.25) {
+    //         light = "red";
+    //         LCD.Write(light);
+    //    }
+    //    else if (count >= 30) {
+    //         if (volt < 0.25) {
+    //             light = "red";
+    //         }
+    //         else {
+    //             light = "blue";
+    //         }
+    //         LCD.Write("3 seconds have passed: ");
+    //         LCD.Write(light);
+    //    }
+    // }
 
+    // if (light.equals("blue")) {
+    //     // strafe sideways to the left
+    //     strafing(20, 66, 'l');
+    //     Sleep(1.0);
+    //     //drive forward to hit button
+    //     drive_forward(20, 165);
+
+    //     Sleep(2.0);
+    //     //drive backwards
+    //     drive_forward(-20, 150);
+    //     Sleep(1.0);
+    //     // strafe sideways to the right
+    //     strafing(20, 66, 'r');
+    //     Sleep(1.0);
+    // }
+    // else {
+    //     // strafe sideways to the right
+    //     strafing(20, 66, 'r');
+    //     Sleep(1.0);
+    //     //drive forward to hit button
+    //     drive_forward(20, 165);
+
+    //     Sleep(2.0);
+    //     //drive backwards
+    //     drive_forward(-20, 150);
+    //     Sleep(1.0);
+    //     // strafe sideways to the left
+    //     strafing(20, 66, 'l');
+    //     Sleep(1.0);
+    // }
+
+    //drive backwards to align with ramp
+    drive_forward(-30, 650);
+    Sleep(1.0);
+
+    // drive forward a few inches
+    drive_forward(30, 110);
+    Sleep(1.0);
+
+    //spin in place 90 degrees left
+    spinInPlace(20, 90, 'l');
+    Sleep(1.0);
+
+    //strafe right about 1.5 inches
+    // strafing(20, 50, 'r');
+    // Sleep(1.0);
+
+    //drive forwards down the ramp
+    drive_forward(30, 1450);
+    Sleep(1.0);
+
+    //drive backwards 4 inches
+    drive_forward(-30, 140);
+    Sleep(1.0);
+
+    //turn 45 degrees left
+    spinInPlace(20, 45, 'l');
+    Sleep(1.0);
+
+    // drive forward 5 inches
+    drive_forward(30, 200);
+    Sleep(1.0);
 
 
 }
 
 void drive_forward(int percent, int counts)
 {
-    
+   
     // Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
@@ -60,16 +224,16 @@ void drive_forward(int percent, int counts)
     left_motor.SetPercent(percent);
 
     if (percent > 0){
-        percent = (percent * -1) - 2;
+        percent = (percent * -1);
     }
     else {
-        percent = (percent * -1) + 2;
+        percent = (percent * -1);
     }
 
     right_motor.SetPercent(percent);
 
     // Keep running until the average counts reach the target
-    while ((left_encoder.Counts() + right_encoder.Counts()) / 2 < counts) {
+    while ((abs(left_encoder.Counts()) + abs(right_encoder.Counts())) / 2 < counts) {
          // Keep running
     }
 
@@ -80,27 +244,26 @@ void drive_forward(int percent, int counts)
 
 }
 
-void turn(int percent, int counts, char direction) //using encoders
-{
+void strafing(int percent, int counts, char direction) {
     //Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
     front_encoder.ResetCounts();
 
     //determine direction
-    if (direction == ('l')) {
-        //Set both motors to desired percent
-        right_motor.SetPercent(-1 * percent);
-        // left_motor.SetPercent(-1 * percent);
-        // front_motor.SetPercent(percent);
-    } else {
-        // right_motor.SetPercent(percent);
+    if (direction == 'r') {
+        right_motor.SetPercent((-1 * percent) - 1);
+        left_motor.SetPercent(-1 * percent);
+        front_motor.SetPercent(percent + 19);
+    }
+    else {
+        right_motor.SetPercent(percent + 1);
         left_motor.SetPercent(percent);
-        // front_motor.SetPercent(-1 * percent);
+        front_motor.SetPercent((-1 * percent) - 19);
     }
 
-    //While the average of the left and right encoder is less than counts, keep running motors
-    while ((left_encoder.Counts() + right_encoder.Counts() + front_encoder.Counts()) / 3 < counts) {
+    //While the front encoder is less than counts, keep running
+    while (abs(front_encoder.Counts()) < counts) {
         //keep running
     }
 
@@ -110,29 +273,31 @@ void turn(int percent, int counts, char direction) //using encoders
     front_motor.Stop();
 }
 
-void sideways(int percent, int counts, char direction) //using encoders
-{
-    //Reset encoder counts
-    right_encoder.ResetCounts();
-    left_encoder.ResetCounts();
-    front_encoder.ResetCounts();
+void spinInPlace(int percent, int degrees, char direction) {
+    if (direction == 'l') {
+        right_motor.SetPercent((-1 * percent) - 0.25);
+        left_motor.SetPercent((-1 * percent) - 0.25);
+        front_motor.SetPercent((-1 * percent) - 10);
 
-    //determine direction
-    if (direction == ('l')) {
-        front_motor.SetPercent(-1 * percent);
-        left_motor.SetPercent(percent);
-    } else {
-        front_motor.SetPercent(percent);
-        left_motor.SetPercent(-1 * percent);
+        // seconds per degree times degree value
+        Sleep(0.0115 * degrees);
+
+        //Turn off motors
+        right_motor.Stop();
+        left_motor.Stop();
+        front_motor.Stop();
     }
+    if (direction == 'r') {
+        right_motor.SetPercent(percent + 0.25);
+        left_motor.SetPercent(percent + 0.25);
+        front_motor.SetPercent(percent + 10);
 
-    //While the average of the left and right encoder is less than counts, keep running motors
-    while ((front_encoder.Counts() + left_encoder.Counts()) / 2 < counts) {
-        //keep running
+        // seconds per degree times degree value
+        Sleep(0.0115 * degrees);
+
+        //Turn off motors
+        right_motor.Stop();
+        left_motor.Stop();
+        front_motor.Stop();
     }
-
-    
-    front_motor.Stop();
-    left_motor.Stop();
 }
-
