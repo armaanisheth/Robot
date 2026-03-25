@@ -44,20 +44,29 @@ void ERCMain()
 
     // 35.7143 Counts/ Inch
     // Driving around 4 inches forward
-    drive_forward(30, 145); //adjust
+    drive_forward(30, 245); //adjust
     Sleep(1.0);
 
     // rotate 45 degrees to the right (20 for percent always)
     spinInPlace(20, 45, 'r');
     Sleep(1.0);
 
-    // strafe 3.5 inches right
-    strafing(20, 133, 'r');
+    // Driving around 9 inches backwards
+    drive_forward(-30, 320); //adjust
+    Sleep(1.0);
+
+    // Driving around 6 inches forward 
+    drive_forward(30, 215); 
+    Sleep(1.0);
+
+
+    // strafe 6.5 inches right
+    strafing(20, 230, 'r');
     Sleep(1.0);
    
     // 35.7143 Counts/ Inch
     // Driving around 35-40 inches forward up the ramp
-    drive_forward(30, 1343); //adjust
+    drive_forward(30, 1343); 
     Sleep(1.0);
 
     // rotate 90 degrees to the left (20 for percent always)
@@ -68,73 +77,107 @@ void ERCMain()
     drive_forward(-30, 275); //adjust
     Sleep(1.0);
 
-    //strafe 2 inches to the right to line us up
-    strafing(20, 66, 'r');
+    // drive forward to a point
+    drive_forward(30, 525); //adjust
     Sleep(1.0);
 
-    // drive forward to light
-    drive_forward(30, 635); //adjust
+    // rotate 90 degrees to the left (20 for percent always)
+    spinInPlace(20, 90, 'l');
     Sleep(1.0);
+
+    // drive forward to window
+    drive_forward(30, 200); //adjust
+    Sleep(1.0);
+
+    // strafe 8 ish inches right
+    strafing(20, 290, 'r');
+    Sleep(1.0);
+
+    // drive backwards an inch
+    drive_forward(-30, 40); //adjust
+    Sleep(1.0);
+
+    // strafe 1.5 ish inches right
+    strafing(20, 66, 'r');
+    Sleep(1.0);
+    
+    // drive forwards an inch
+    drive_forward(30, 40); //adjust
+    Sleep(1.0);
+
+    // strafe 8 ish inches left
+    strafing(20, 275, 'l');
+    Sleep(1.0);
+
+    // drive backwards from the window
+    drive_forward(-30, 200); //adjust
+    Sleep(1.0);
+
+    // rotate 90 degrees to the right (20 for percent always)
+    spinInPlace(20, 90, 'r');
+    Sleep(1.0);
+
+
 
     //attempt to read blue or red light value from the cds cell sensor
     //print message to the screen
-    String light;
-    volt = cds.Value();
-    count = 0;
-    while (!light.equals("blue") && !light.equals("red")) {
-       volt = cds.Value();
-       Sleep(0.1);
-       count++;
-       if (volt > 0.3 && volt < 0.6) {
-            light = "blue";
-            LCD.Write(light);
-       }
-       else if (volt < 0.25) {
-            light = "red";
-            LCD.Write(light);
-       }
-       else if (count >= 30) {
-            if (volt < 0.25) {
-                light = "red";
-            }
-            else {
-                light = "blue";
-            }
-            LCD.Write("3 seconds have passed: ");
-            LCD.Write(light);
-       }
-    }
+    // String light;
+    // volt = cds.Value();
+    // count = 0;
+    // while (!light.equals("blue") && !light.equals("red")) {
+    //    volt = cds.Value();
+    //    Sleep(0.1);
+    //    count++;
+    //    if (volt > 0.3 && volt < 0.6) {
+    //         light = "blue";
+    //         LCD.Write(light);
+    //    }
+    //    else if (volt < 0.25) {
+    //         light = "red";
+    //         LCD.Write(light);
+    //    }
+    //    else if (count >= 30) {
+    //         if (volt < 0.25) {
+    //             light = "red";
+    //         }
+    //         else {
+    //             light = "blue";
+    //         }
+    //         LCD.Write("3 seconds have passed: ");
+    //         LCD.Write(light);
+    //    }
+    // }
 
-    if (light.equals("blue")) {
-        // strafe sideways to the left
-        strafing(20, 66, 'l');
-        Sleep(1.0);
-        //drive forward to hit button
-        drive_forward(20, 165);
+    // if (light.equals("blue")) {
+    //     // strafe sideways to the left
+    //     strafing(20, 66, 'l');
+    //     Sleep(1.0);
+    //     //drive forward to hit button
+    //     drive_forward(20, 165);
 
-        Sleep(2.0);
-        //drive backwards
-        drive_forward(-20, 150);
-        Sleep(1.0);
-        // strafe sideways to the right
-        strafing(20, 66, 'r');
-        Sleep(1.0);
-    }
-    else {
-        // strafe sideways to the right
-        strafing(20, 66, 'r');
-        Sleep(1.0);
-        //drive forward to hit button
-        drive_forward(20, 165);
+    //     Sleep(2.0);
+    //     //drive backwards
+    //     drive_forward(-20, 150);
+    //     Sleep(1.0);
+    //     // strafe sideways to the right
+    //     strafing(20, 66, 'r');
+    //     Sleep(1.0);
+    // }
+    // else {
+    //     // strafe sideways to the right
+    //     strafing(20, 66, 'r');
+    //     Sleep(1.0);
+    //     //drive forward to hit button
+    //     drive_forward(20, 165);
 
-        Sleep(2.0);
-        //drive backwards
-        drive_forward(-20, 150);
-        Sleep(1.0);
-        // strafe sideways to the left
-        strafing(20, 66, 'l');
-        Sleep(1.0);
-    }
+    //     Sleep(2.0);
+    //     //drive backwards
+    //     drive_forward(-20, 150);
+    //     Sleep(1.0);
+    //     // strafe sideways to the left
+    //     strafing(20, 66, 'l');
+    //     Sleep(1.0);
+    // }
 
     //drive backwards to align with ramp
     drive_forward(-30, 650);
