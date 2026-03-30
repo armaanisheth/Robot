@@ -214,9 +214,9 @@ void ERCMain()
 
 }
 
-void drive_forward(int percent, int counts)
+void drive_forward(int percent, double inches)
 {
-   
+    double counts = inches * 35.7143;
     // Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
@@ -244,12 +244,14 @@ void drive_forward(int percent, int counts)
 
 }
 
-void strafing(int percent, int counts, char direction) {
+void strafing(int percent, double inches, char direction) {
     //Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
     front_encoder.ResetCounts();
 
+    double counts = inches * 33;
+    
     //determine direction
     if (direction == 'r') {
         right_motor.SetPercent((-1 * percent) - 1);
