@@ -5,117 +5,153 @@
 #include <FEHMotor.h>
 #include <FEHUtility.h>
 #include <Encoder.h>
+#include <FEHServo.h>
+#include <FEHRCS.h>
 
-AnalogInputPin cds(FEHIO::Pin4);
+AnalogInputPin cds(FEHIO::Pin2);
 
 FEHMotor right_motor(FEHMotor::Motor0, 9.0);
-DigitalEncoder right_encoder(FEHIO::Pin8);
+DigitalEncoder right_encoder(FEHIO::Pin11);
 
 FEHMotor left_motor(FEHMotor::Motor1, 9.0);
 DigitalEncoder left_encoder(FEHIO::Pin14);
 
 FEHMotor front_motor(FEHMotor::Motor2, 9.0);
-DigitalEncoder front_encoder(FEHIO::Pin11);
+DigitalEncoder front_encoder(FEHIO::Pin8);
+
+FEHServo arm_servo_RT(FEHServo::Servo2);
+FEHServo arm_servo_ARM(FEHServo::Servo4);
+
 
 void drive_forward(int percent, int counts);
 void strafing(int percent, int counts, char direction);
 void spinInPlace(int percent, int degrees, char direction);
 
 void ERCMain()
-{
-    //read in the start line and begin driving
-    //default 30 sec wait time, if light is not read
+{ 
+    // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
+    
+    
+    
+    //Sleep(30.0);
+
+
+
+    arm_servo_ARM.SetDegree(170.0);
+    Sleep(2.0);
+
+    arm_servo_ARM.SetDegree(160.0);
+    Sleep(3.0);
+
+    arm_servo_ARM.SetDegree(150.0);
+    Sleep(3.0);
+
+    arm_servo_ARM.SetDegree(140.0);
+    Sleep(3.0);
+
+    RCS.InitializeTouchMenu("1130D9ZBH");
+    int correctLever = RCS.GetLever();
+
+    // arm_servo_ARM.SetDegree(0.0);
+    // Sleep(2.0);
+
+    // arm_servo_ARM.SetDegree(180.0);
+    // Sleep(10.0);
+
     int count = 0;
     float volt = cds.Value();
-    //print wait message
-    LCD.Write("Waiting for start light ");
+    
     //read starting voltage and continuous volt updates until a light source is read
     while (volt > 0.6  && count < 300) {
        volt = cds.Value();
        Sleep(0.1);
        count++;
     }
-    //print starting message
-    LCD.Write("Starting...");
    
     //drive backward to hit the final button
-    drive_forward(-30, 90); //change counts
-    Sleep(1.0);
+    drive_forward(-30, 70); //change counts
+    Sleep(0.5);
 
-    // 35.7143 Counts/ Inch
-    // Driving around 4 inches forward
-    drive_forward(30, 245); //adjust
-    Sleep(1.0);
+    //drive forward from the final button
+    drive_forward(30, 70); //change counts
+    Sleep(0.5);
 
-    // rotate 45 degrees to the right (20 for percent always)
-    spinInPlace(20, 45, 'r');
-    Sleep(1.0);
+    arm_servo_RT.SetDegree(32.0);
+    Sleep(0.5);
 
-    // Driving around 9 inches backwards
-    drive_forward(-30, 320); //adjust
-    Sleep(1.0);
+    spinInPlace(20, 140, 'r');
+    Sleep(0.5);
 
-    // Driving around 6 inches forward 
-    drive_forward(30, 215); 
-    Sleep(1.0);
-
-
-    // strafe 6.5 inches right
-    strafing(20, 230, 'r');
-    Sleep(1.0);
-   
-    // 35.7143 Counts/ Inch
-    // Driving around 35-40 inches forward up the ramp
-    drive_forward(30, 1343); 
-    Sleep(1.0);
-
-    // rotate 90 degrees to the left (20 for percent always)
-    spinInPlace(20, 90, 'l');
-    Sleep(1.0);
-
-    // drive backwards to set ourselves up
-    drive_forward(-30, 275); //adjust
-    Sleep(1.0);
-
-    // drive forward to a point
-    drive_forward(30, 525); //adjust
-    Sleep(1.0);
-
-    // rotate 90 degrees to the left (20 for percent always)
-    spinInPlace(20, 90, 'l');
-    Sleep(1.0);
-
-    // drive forward to window
-    drive_forward(30, 200); //adjust
-    Sleep(1.0);
-
-    // strafe 8 ish inches right
-    strafing(20, 290, 'r');
-    Sleep(1.0);
-
-    // drive backwards an inch
-    drive_forward(-30, 40); //adjust
-    Sleep(1.0);
-
-    // strafe 1.5 ish inches right
-    strafing(20, 66, 'r');
-    Sleep(1.0);
+    drive_forward(-30, 175); //change counts
+    Sleep(0.5);
     
-    // drive forwards an inch
-    drive_forward(30, 40); //adjust
+    strafing(20, 190, 'r');
+    Sleep(0.5);
+
+    drive_forward(-30, 250); //change counts
+    Sleep(0.5);
+
+    // strafing(20, 35, 'r');
+    // Sleep(0.5);
+
+    // drive_forward(-30, 200); //change counts
+    // Sleep(0.5);
+
+    
+
+    arm_servo_RT.SetDegree(180.0);
+    Sleep(0.5);
+
+    drive_forward(30, 70);
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(20.0);
     Sleep(1.0);
 
-    // strafe 8 ish inches left
-    strafing(20, 275, 'l');
+    drive_forward(-30, 80);
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(180.0);
     Sleep(1.0);
 
-    // drive backwards from the window
-    drive_forward(-30, 200); //adjust
+    arm_servo_RT.SetDegree(32.0);
+    Sleep(0.5);
+
+    drive_forward(30, 70);
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(173.0);
     Sleep(1.0);
 
-    // rotate 90 degrees to the right (20 for percent always)
-    spinInPlace(20, 90, 'r');
+    drive_forward(-30, 80);
     Sleep(1.0);
+
+    arm_servo_RT.SetDegree(45.0);
+    Sleep(1.0);
+
+    drive_forward(30, 125);
+    Sleep(1.0);
+
+    strafing(20, 840, 'l');
+    Sleep(1.0);
+
+    spinInPlace(20,200,'r');
+    Sleep(1.0);
+
+
+    arm_servo_ARM.SetDegree(126.0);
+    Sleep(3.0);
+
+    drive_forward(30,185);
+    Sleep(1.0);
+
+    arm_servo_ARM.SetDegree(70);
+
+   
+    
+    
+
+    
 
 
 
@@ -179,44 +215,15 @@ void ERCMain()
     //     Sleep(1.0);
     // }
 
-    //drive backwards to align with ramp
-    drive_forward(-30, 650);
-    Sleep(1.0);
+    
 
-    // drive forward a few inches
-    drive_forward(30, 110);
-    Sleep(1.0);
-
-    //spin in place 90 degrees left
-    spinInPlace(20, 90, 'l');
-    Sleep(1.0);
-
-    //strafe right about 1.5 inches
-    // strafing(20, 50, 'r');
-    // Sleep(1.0);
-
-    //drive forwards down the ramp
-    drive_forward(30, 1450);
-    Sleep(1.0);
-
-    //drive backwards 4 inches
-    drive_forward(-30, 140);
-    Sleep(1.0);
-
-    //turn 45 degrees left
-    spinInPlace(20, 45, 'l');
-    Sleep(1.0);
-
-    // drive forward 5 inches
-    drive_forward(30, 200);
-    Sleep(1.0);
 
 
 }
 
-void drive_forward(int percent, double inches)
+void drive_forward(int percent, int counts)
 {
-    double counts = inches * 35.7143;
+    // double counts = inches * 35.7143;
     // Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
@@ -244,13 +251,13 @@ void drive_forward(int percent, double inches)
 
 }
 
-void strafing(int percent, double inches, char direction) {
+void strafing(int percent, int counts, char direction) {
     //Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
     front_encoder.ResetCounts();
 
-    double counts = inches * 33;
+    // double counts = inches * 33;
     
     //determine direction
     if (direction == 'r') {
