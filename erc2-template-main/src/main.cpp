@@ -29,129 +29,112 @@ void spinInPlace(int degrees, char direction);
 
 void ERCMain()
 { 
-    
+    // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
 
-    
+    arm_servo_ARM.SetDegree(0.0);
 
+    RCS.InitializeTouchMenu("1130D9ZBH");
+    int correctLever = RCS.GetLever();
 
-
-    // // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
-    // arm_servo_ARM.SetDegree(170.0);
-    // Sleep(3.0);
-
-    // arm_servo_ARM.SetDegree(160.0);
-    // Sleep(3.0);
-
-    // arm_servo_ARM.SetDegree(150.0);
-    // Sleep(3.0);
-
-    // arm_servo_ARM.SetDegree(140.0);
-    // Sleep(3.0);
-
-    // arm_servo_ARM.SetDegree(130.0);
-    // Sleep(3.0);
-    
-
-    // Sleep(30.0);
-
-
-
-
-    // RCS.InitializeTouchMenu("1130D9ZBH");
-    // int correctLever = RCS.GetLever();
-
-    // // arm_servo_ARM.SetDegree(0.0);
-    // // Sleep(2.0);
-
-    // // arm_servo_ARM.SetDegree(180.0);
-    // // Sleep(10.0);
-
-    // int count = 0;
-    // float volt = cds.Value();
-    
-    // //read starting voltage and continuous volt updates until a light source is read
-    // while (volt > 0.6  && count < 300) {
-    //    volt = cds.Value();
-    //    Sleep(0.1);
-    //    count++;
-    // }
+    int count = 0;
+    float volt = cds.Value();
+      
+    //read starting voltage and continuous volt updates until a light source is read
+    while (volt > 0.6  && count < 300) {
+       volt = cds.Value();
+       Sleep(0.1);
+       count++;
+    }
    
-    // //drive backward to hit the final button
-    // drive_forward(-30, 70); //change counts
-    // Sleep(0.5);
+    //drive backward to hit the final button
+    drive(2, 'b'); 
+    Sleep(0.5);
 
-    // //drive forward from the final button
-    // drive_forward(30, 70); //change counts
-    // Sleep(0.5);
+    //drive forward from the final button
+    drive(2, 'f'); 
+    Sleep(0.5);
 
-    // arm_servo_RT.SetDegree(32.0);
-    // Sleep(0.5);
+    arm_servo_RT.SetDegree(32.0);
 
-    // spinInPlace(20, 140, 'r');
-    // Sleep(0.5);
+    spinInPlace(135, 'r');
+    Sleep(0.5);
 
-    // drive_forward(-30, 175); //change counts
-    // Sleep(0.5);
+    drive(4, 'b'); 
+    Sleep(0.5);
     
-    // strafing(20, 190, 'r');
-    // Sleep(0.5);
+    strafing(5.15, 'r');
+    Sleep(0.5);
 
-    // drive_forward(-30, 250); //change counts
-    // Sleep(0.5);
-
-    // strafing(20, 35, 'r');
-    // Sleep(0.5);
-
-    // drive_forward(-30, 200); //change counts
-    // Sleep(0.5);
-
-    
-
-    // arm_servo_RT.SetDegree(180.0);
-    // Sleep(0.5);
-
-    // drive_forward(30, 70);
-    // Sleep(0.5);
-
-    // arm_servo_RT.SetDegree(20.0);
-    // Sleep(1.0);
-
-    // drive_forward(-30, 80);
-    // Sleep(0.5);
-
-    // arm_servo_RT.SetDegree(180.0);
-    // Sleep(1.0);
-
-    // arm_servo_RT.SetDegree(32.0);
-    // Sleep(0.5);
-
-    // drive_forward(30, 70);
-    // Sleep(0.5);
-
-    // arm_servo_RT.SetDegree(173.0);
-    // Sleep(1.0);
-
-    // drive_forward(-30, 80);
-    // Sleep(1.0);
-
-    // arm_servo_RT.SetDegree(32.0);
-    // Sleep(1.0);
-
-    // drive_forward(30, 70);
-    // Sleep(1.0);
-
-    // strafing(20, 120, 'l');
-    // Sleep(0.5);
-
-    // drive_forward(30, 425);
-    // Sleep(1.0);
-    
-    
-
-    
+    drive(10.5, 'b'); 
+    Sleep(0.5);
 
 
+    arm_servo_RT.SetDegree(180.0);
+    Sleep(0.5);
 
+    drive(2, 'f');
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(20.0);
+    Sleep(0.5);
+
+    drive(2, 'b');
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(180.0);
+    Sleep(1.5);
+
+    arm_servo_RT.SetDegree(32.0);
+    Sleep(0.5);
+
+    drive(2, 'f');
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(173.0);
+    Sleep(0.5);
+
+    drive(2.5, 'b');
+    Sleep(0.5);
+
+    arm_servo_RT.SetDegree(32.0);
+    Sleep(1.0);
+
+    drive(2, 'f');
+    Sleep(0.5);
+
+    strafing(16, 'l');
+    Sleep(0.5);
+
+    spinInPlace(180, 'r');
+    Sleep(0.5);
+
+    arm_servo_ARM.SetDegree(126.0);
+    Sleep(3.0);
+
+    drive(8.25, 'f');
+    Sleep(0.5);
+
+    arm_servo_ARM.SetDegree(70);
+    Sleep(2.0);
+
+    strafing(5.0, 'l');
+    Sleep(0.5);
+
+    spinInPlace(90, 'r');
+    Sleep(0.5);
+
+    strafing(16.0, 'r');
+    Sleep(0.5);
+
+    drive(32.75, 'f');
+    Sleep(0.5);
+
+    arm_servo_ARM.SetDegree(80.0);
+    Sleep(0.5);
+
+    drive(5.75, 'b');
+    Sleep(100.0);
+   
     //attempt to read blue or red light value from the cds cell sensor
     //print message to the screen
     // String light;
@@ -211,6 +194,9 @@ void ERCMain()
     //     strafing(20, 66, 'l');
     //     Sleep(1.0);
     // }
+
+    
+
 
 
 }
