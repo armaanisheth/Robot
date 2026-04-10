@@ -30,8 +30,15 @@ void spinInPlace(int percent, int degrees, char direction);
 void ERCMain()
 { 
     // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
+    
+    
+    
+    //Sleep(30.0);
+
+
+
     arm_servo_ARM.SetDegree(170.0);
-    Sleep(3.0);
+    Sleep(2.0);
 
     arm_servo_ARM.SetDegree(160.0);
     Sleep(3.0);
@@ -41,15 +48,6 @@ void ERCMain()
 
     arm_servo_ARM.SetDegree(140.0);
     Sleep(3.0);
-
-    arm_servo_ARM.SetDegree(130.0);
-    Sleep(3.0);
-    
-
-    Sleep(30.0);
-
-
-
 
     RCS.InitializeTouchMenu("1130D9ZBH");
     int correctLever = RCS.GetLever();
@@ -93,11 +91,11 @@ void ERCMain()
     drive_forward(-30, 250); //change counts
     Sleep(0.5);
 
-    strafing(20, 35, 'r');
-    Sleep(0.5);
+    // strafing(20, 35, 'r');
+    // Sleep(0.5);
 
-    drive_forward(-30, 200); //change counts
-    Sleep(0.5);
+    // drive_forward(-30, 200); //change counts
+    // Sleep(0.5);
 
     
 
@@ -128,17 +126,28 @@ void ERCMain()
     drive_forward(-30, 80);
     Sleep(1.0);
 
-    arm_servo_RT.SetDegree(32.0);
+    arm_servo_RT.SetDegree(45.0);
     Sleep(1.0);
 
-    drive_forward(30, 70);
+    drive_forward(30, 125);
     Sleep(1.0);
 
-    strafing(20, 120, 'l');
-    Sleep(0.5);
-
-    drive_forward(30, 425);
+    strafing(20, 840, 'l');
     Sleep(1.0);
+
+    spinInPlace(20,200,'r');
+    Sleep(1.0);
+
+
+    arm_servo_ARM.SetDegree(126.0);
+    Sleep(3.0);
+
+    drive_forward(30,185);
+    Sleep(1.0);
+
+    arm_servo_ARM.SetDegree(70);
+
+   
     
     
 
@@ -208,33 +217,6 @@ void ERCMain()
 
     
 
-    // drive forward a few inches
-    drive_forward(30, 110);
-    Sleep(1.0);
-
-    //spin in place 90 degrees left
-    spinInPlace(20, 90, 'l');
-    Sleep(1.0);
-
-    //strafe right about 1.5 inches
-    // strafing(20, 50, 'r');
-    // Sleep(1.0);
-
-    //drive forwards down the ramp
-    drive_forward(30, 1450);
-    Sleep(1.0);
-
-    //drive backwards 4 inches
-    drive_forward(-30, 140);
-    Sleep(1.0);
-
-    //turn 45 degrees left
-    spinInPlace(20, 45, 'l');
-    Sleep(1.0);
-
-    // drive forward 5 inches
-    drive_forward(30, 200);
-    Sleep(1.0);
 
 
 }
