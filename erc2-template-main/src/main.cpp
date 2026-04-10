@@ -23,122 +23,128 @@ FEHServo arm_servo_RT(FEHServo::Servo2);
 FEHServo arm_servo_ARM(FEHServo::Servo4);
 
 
-void drive_forward(int percent, int counts);
-void strafing(int percent, int counts, char direction);
-void spinInPlace(int percent, int degrees, char direction);
+void drive(double inches, char direction);
+void strafing(double inches, char direction);
+void spinInPlace(int degrees, char direction);
 
 void ERCMain()
 { 
-    // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
-    arm_servo_ARM.SetDegree(170.0);
-    Sleep(3.0);
-
-    arm_servo_ARM.SetDegree(160.0);
-    Sleep(3.0);
-
-    arm_servo_ARM.SetDegree(150.0);
-    Sleep(3.0);
-
-    arm_servo_ARM.SetDegree(140.0);
-    Sleep(3.0);
-
-    arm_servo_ARM.SetDegree(130.0);
-    Sleep(3.0);
     
 
-    Sleep(30.0);
-
-
-
-
-    RCS.InitializeTouchMenu("1130D9ZBH");
-    int correctLever = RCS.GetLever();
-
-    // arm_servo_ARM.SetDegree(0.0);
-    // Sleep(2.0);
-
-    // arm_servo_ARM.SetDegree(180.0);
-    // Sleep(10.0);
-
-    int count = 0;
-    float volt = cds.Value();
     
-    //read starting voltage and continuous volt updates until a light source is read
-    while (volt > 0.6  && count < 300) {
-       volt = cds.Value();
-       Sleep(0.1);
-       count++;
-    }
+
+
+
+    // // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
+    // arm_servo_ARM.SetDegree(170.0);
+    // Sleep(3.0);
+
+    // arm_servo_ARM.SetDegree(160.0);
+    // Sleep(3.0);
+
+    // arm_servo_ARM.SetDegree(150.0);
+    // Sleep(3.0);
+
+    // arm_servo_ARM.SetDegree(140.0);
+    // Sleep(3.0);
+
+    // arm_servo_ARM.SetDegree(130.0);
+    // Sleep(3.0);
+    
+
+    // Sleep(30.0);
+
+
+
+
+    // RCS.InitializeTouchMenu("1130D9ZBH");
+    // int correctLever = RCS.GetLever();
+
+    // // arm_servo_ARM.SetDegree(0.0);
+    // // Sleep(2.0);
+
+    // // arm_servo_ARM.SetDegree(180.0);
+    // // Sleep(10.0);
+
+    // int count = 0;
+    // float volt = cds.Value();
+    
+    // //read starting voltage and continuous volt updates until a light source is read
+    // while (volt > 0.6  && count < 300) {
+    //    volt = cds.Value();
+    //    Sleep(0.1);
+    //    count++;
+    // }
    
-    //drive backward to hit the final button
-    drive_forward(-30, 70); //change counts
-    Sleep(0.5);
+    // //drive backward to hit the final button
+    // drive_forward(-30, 70); //change counts
+    // Sleep(0.5);
 
-    //drive forward from the final button
-    drive_forward(30, 70); //change counts
-    Sleep(0.5);
+    // //drive forward from the final button
+    // drive_forward(30, 70); //change counts
+    // Sleep(0.5);
 
-    arm_servo_RT.SetDegree(32.0);
-    Sleep(0.5);
+    // arm_servo_RT.SetDegree(32.0);
+    // Sleep(0.5);
 
-    spinInPlace(20, 140, 'r');
-    Sleep(0.5);
+    // spinInPlace(20, 140, 'r');
+    // Sleep(0.5);
 
-    drive_forward(-30, 175); //change counts
-    Sleep(0.5);
+    // drive_forward(-30, 175); //change counts
+    // Sleep(0.5);
     
-    strafing(20, 190, 'r');
-    Sleep(0.5);
+    // strafing(20, 190, 'r');
+    // Sleep(0.5);
 
-    drive_forward(-30, 250); //change counts
-    Sleep(0.5);
+    // drive_forward(-30, 250); //change counts
+    // Sleep(0.5);
 
-    strafing(20, 35, 'r');
-    Sleep(0.5);
+    // strafing(20, 35, 'r');
+    // Sleep(0.5);
 
-    drive_forward(-30, 200); //change counts
-    Sleep(0.5);
+    // drive_forward(-30, 200); //change counts
+    // Sleep(0.5);
 
     
 
-    arm_servo_RT.SetDegree(180.0);
-    Sleep(0.5);
+    // arm_servo_RT.SetDegree(180.0);
+    // Sleep(0.5);
 
-    drive_forward(30, 70);
-    Sleep(0.5);
+    // drive_forward(30, 70);
+    // Sleep(0.5);
 
-    arm_servo_RT.SetDegree(20.0);
-    Sleep(1.0);
+    // arm_servo_RT.SetDegree(20.0);
+    // Sleep(1.0);
 
-    drive_forward(-30, 80);
-    Sleep(0.5);
+    // drive_forward(-30, 80);
+    // Sleep(0.5);
 
-    arm_servo_RT.SetDegree(180.0);
-    Sleep(1.0);
+    // arm_servo_RT.SetDegree(180.0);
+    // Sleep(1.0);
 
-    arm_servo_RT.SetDegree(32.0);
-    Sleep(0.5);
+    // arm_servo_RT.SetDegree(32.0);
+    // Sleep(0.5);
 
-    drive_forward(30, 70);
-    Sleep(0.5);
+    // drive_forward(30, 70);
+    // Sleep(0.5);
 
-    arm_servo_RT.SetDegree(173.0);
-    Sleep(1.0);
+    // arm_servo_RT.SetDegree(173.0);
+    // Sleep(1.0);
 
-    drive_forward(-30, 80);
-    Sleep(1.0);
+    // drive_forward(-30, 80);
+    // Sleep(1.0);
 
-    arm_servo_RT.SetDegree(32.0);
-    Sleep(1.0);
+    // arm_servo_RT.SetDegree(32.0);
+    // Sleep(1.0);
 
-    drive_forward(30, 70);
-    Sleep(1.0);
+    // drive_forward(30, 70);
+    // Sleep(1.0);
 
-    strafing(20, 120, 'l');
-    Sleep(0.5);
+    // strafing(20, 120, 'l');
+    // Sleep(0.5);
 
-    drive_forward(30, 425);
-    Sleep(1.0);
+    // drive_forward(30, 425);
+    // Sleep(1.0);
     
     
 
@@ -206,76 +212,48 @@ void ERCMain()
     //     Sleep(1.0);
     // }
 
-    
-
-    // drive forward a few inches
-    drive_forward(30, 110);
-    Sleep(1.0);
-
-    //spin in place 90 degrees left
-    spinInPlace(20, 90, 'l');
-    Sleep(1.0);
-
-    //strafe right about 1.5 inches
-    // strafing(20, 50, 'r');
-    // Sleep(1.0);
-
-    //drive forwards down the ramp
-    drive_forward(30, 1450);
-    Sleep(1.0);
-
-    //drive backwards 4 inches
-    drive_forward(-30, 140);
-    Sleep(1.0);
-
-    //turn 45 degrees left
-    spinInPlace(20, 45, 'l');
-    Sleep(1.0);
-
-    // drive forward 5 inches
-    drive_forward(30, 200);
-    Sleep(1.0);
-
 
 }
 
-void drive_forward(int percent, int counts)
+void drive(double inches, char direction)
 {
-    // double counts = inches * 35.7143;
+    double percent = 40.0;
+    double counts;
     // Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
 
-    left_motor.SetPercent(percent);
-
-    if (percent > 0){
+    if (direction == 'f'){
+        counts =  inches * 33.94;
+        left_motor.SetPercent(percent+2.5);
         percent = (percent * -1);
+        right_motor.SetPercent(percent);
     }
     else {
+        counts =  inches * 34.57;
+        right_motor.SetPercent(percent);
         percent = (percent * -1);
+        left_motor.SetPercent(percent-2.5);
     }
-
-    right_motor.SetPercent(percent);
 
     // Keep running until the average counts reach the target
     while ((abs(left_encoder.Counts()) + abs(right_encoder.Counts())) / 2 < counts) {
          // Keep running
     }
 
-
     // Turn off motors  
     right_motor.Stop();
     left_motor.Stop();
-
 }
 
-void strafing(int percent, int counts, char direction) {
+void strafing(double inches, char direction) {
+
+    double percent = 20.0;
+    double counts = inches * 40.4040;
     //Reset encoder counts
     right_encoder.ResetCounts();
     left_encoder.ResetCounts();
     front_encoder.ResetCounts();
-
-    // double counts = inches * 33;
     
     //determine direction
     if (direction == 'r') {
@@ -300,14 +278,14 @@ void strafing(int percent, int counts, char direction) {
     front_motor.Stop();
 }
 
-void spinInPlace(int percent, int degrees, char direction) {
+void spinInPlace(int degrees, char direction) {
+    double percent = 30.0;
     if (direction == 'l') {
-        right_motor.SetPercent((-1 * percent) - 0.25);
-        left_motor.SetPercent((-1 * percent) - 0.25);
+        right_motor.SetPercent((-1 * percent));
+        left_motor.SetPercent((-1 * percent));
         front_motor.SetPercent((-1 * percent) - 10);
 
-        // seconds per degree times degree value
-        Sleep(0.0115 * degrees);
+        Sleep(0.008056 * degrees);
 
         //Turn off motors
         right_motor.Stop();
@@ -315,12 +293,11 @@ void spinInPlace(int percent, int degrees, char direction) {
         front_motor.Stop();
     }
     if (direction == 'r') {
-        right_motor.SetPercent(percent + 0.25);
-        left_motor.SetPercent(percent + 0.25);
+        right_motor.SetPercent(percent);
+        left_motor.SetPercent(percent);
         front_motor.SetPercent(percent + 10);
 
-        // seconds per degree times degree value
-        Sleep(0.0115 * degrees);
+        Sleep(0.008056 * degrees);
 
         //Turn off motors
         right_motor.Stop();
