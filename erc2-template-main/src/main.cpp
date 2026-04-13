@@ -137,8 +137,8 @@ void ERCMain()
     strafing(18, 'l');
     Sleep(0.5);
 
-    //spin the robot 190 degrees to face the arm toward the basket
-    spinInPlace(190, 'r');
+    //spin the robot 180 degrees to face the arm toward the basket
+    spinInPlace(180, 'r');
     Sleep(0.5);
 
     //set the degree of the front arm to 126 to position the arm for the apple basket handle
@@ -146,7 +146,7 @@ void ERCMain()
     Sleep(3.0);
 
     //drive forward to position hook under the apple basket handle
-    drive(5.25, 'f');
+    drive(6.25, 'f');
     Sleep(0.5);
 
     //set the arm degree to 70 (upward) to lift basket
@@ -338,7 +338,7 @@ void driveApples(double inches)
     counts =  inches * 33.94;
     left_motor.SetPercent(percent);
     percent = (percent * -1);
-    right_motor.SetPercent(percent + 1.5);
+    right_motor.SetPercent(percent - 1.5);
 
     // Keep running until the average counts reach the target
     while ((abs(left_encoder.Counts()) + abs(right_encoder.Counts())) / 2 < counts) {
