@@ -25,6 +25,7 @@ FEHServo arm_servo_ARM(FEHServo::Servo4);
 
 //declare the methods
 void drive(double inches, char direction);
+void driveApples(double inches);
 void strafing(double inches, char direction);
 void spinInPlace(int degrees, char direction);
 
@@ -44,7 +45,7 @@ void ERCMain()
     //last time we can touch the robot
     WaitForFinalAction();
 
-    // PICK UP BUCKET AT 126. MAKE IT GO UP TO 70 FOR DEPOSITING.
+    // START OF CODE FOR THE TASKS BELOW THE RAMP
     //read starting voltage and continuous volt updates until a light source with a red filter
     while (volt > 0.6  && count < 300) {
         //receive new voltage
@@ -64,16 +65,16 @@ void ERCMain()
     //set the spinner degree to 32 for compost drum starting position
     arm_servo_RT.SetDegree(32.0);
 
-    //turn the robot 135 degrees right to face the spinner toward the compost drum
-    spinInPlace(135, 'r');
+    //turn the robot 131 degrees right to face the spinner toward the compost drum
+    spinInPlace(131, 'r');
     Sleep(0.5);
 
     //drive forward 4 inches toward composter
     drive(4, 'b'); 
     Sleep(0.5);
     
-    //strafe 5.15 inches right to align close to the wall
-    strafing(5.15, 'r');
+    //strafe 5.17 inches right to align close to the wall
+    strafing(5.17, 'r');
     Sleep(0.5);
 
     //drive 10.5 inches backward to flush the spinner to the drum
@@ -92,6 +93,10 @@ void ERCMain()
     arm_servo_RT.SetDegree(20.0);
     Sleep(0.5);
 
+    //strafe to align with the compost
+    strafing(0.2, 'r');
+    Sleep(0.1);
+
     //once again flush the spinner to the drum
     drive(2, 'b');
     Sleep(0.5);
@@ -109,8 +114,12 @@ void ERCMain()
     Sleep(0.5);
 
     //reposition the spinner
-    arm_servo_RT.SetDegree(173.0);
+    arm_servo_RT.SetDegree(176.0);
     Sleep(0.5);
+
+    //strafe to align with the compost
+    strafing(0.2, 'r');
+    Sleep(0.1);
 
     //last time to flush the spinner to the compost drum
     drive(2.5, 'b');
@@ -125,11 +134,11 @@ void ERCMain()
     Sleep(0.5);
 
     //strafe left to position the robot parallel to the apple basket
-    strafing(16, 'l');
+    strafing(18, 'l');
     Sleep(0.5);
 
-    //spin the robot 180 degrees to face the arm toward the basket
-    spinInPlace(180, 'r');
+    //spin the robot 190 degrees to face the arm toward the basket
+    spinInPlace(190, 'r');
     Sleep(0.5);
 
     //set the degree of the front arm to 126 to position the arm for the apple basket handle
@@ -137,7 +146,7 @@ void ERCMain()
     Sleep(3.0);
 
     //drive forward to position hook under the apple basket handle
-    drive(8.25, 'f');
+    drive(5.25, 'f');
     Sleep(0.5);
 
     //set the arm degree to 70 (upward) to lift basket
@@ -153,20 +162,73 @@ void ERCMain()
     Sleep(0.5);
 
     //strafe right so the robot is in front of the ramp
-    strafing(16.0, 'r');
+    strafing(18.0, 'r');
     Sleep(0.5);
 
     //drive up the ramp to the apple basket table
-    drive(32.75, 'f');
+    driveApples(33.75);
     Sleep(0.5);
 
-    //set the degree of the robot to 80 to deposit it
-    arm_servo_ARM.SetDegree(80.0);
+    //set the degree of the robot to 85 to deposit it
+    arm_servo_ARM.SetDegree(85.0);
     Sleep(0.5);
 
-    //drive backward to leave the basket on the table and remove the arm from the handle
-    drive(5.75, 'b');
-    Sleep(100.0);
+    //set the degree of the robot to 95 to deposit it
+    arm_servo_ARM.SetDegree(95.0);
+    Sleep(0.5);
+
+    // START OF CODE FOR THE TASKS ABOVE THE RAMP
+    //drive backward away from the table
+    drive(7, 'b');
+    Sleep(0.5);
+
+    //strafe left to move away from the table
+    strafing(2.5, 'l');
+    Sleep(0.5);
+
+    //set the degree of the arm to 140 to posiiton it for the window
+    arm_servo_ARM.SetDegree(140.0);
+    Sleep(0.5);
+
+    //turn left 90 degrees to move the arm at the same level as the window handle
+    spinInPlace(90, 'l');
+    Sleep(0.5);
+
+    //strafe left to move toward window
+    strafing(4, 'l');
+    Sleep(0.5);
+
+    //drive forward to close window
+    drive(7, 'f');
+    Sleep(0.5);
+
+    //strafe right to reposition the arm outside the front handle
+    strafing(3, 'r');
+    Sleep(0.5);
+
+    //drive forward
+    drive(2, 'f');
+    Sleep(0.5);
+
+    //strafe left to position arm behind handle 
+    strafing(1, 'l');
+    Sleep(0.5);
+
+    //move backward to open window again
+    drive(4.5, 'b');
+    Sleep(0.5);
+
+    //strafe right to align with center line in front of humidifer
+    strafing(7.5, 'r');
+    Sleep(0.5);
+
+    //set arm to default position
+    arm_servo_ARM.SetDegree(0.0);
+    Sleep(0.5);
+
+    //drive forward to align CdS cell with sensor
+    drive(10.5, 'f');
+    Sleep(0.5);
    
     //attempt to read blue or red light value from the cds cell sensor
     //print message to the screen
@@ -265,6 +327,29 @@ void drive(double inches, char direction)
     left_motor.Stop();
 }
 
+void driveApples(double inches)
+{
+    double percent = 40.0;
+    double counts;
+    // Reset encoder counts
+    right_encoder.ResetCounts();
+    left_encoder.ResetCounts();
+
+    counts =  inches * 33.94;
+    left_motor.SetPercent(percent);
+    percent = (percent * -1);
+    right_motor.SetPercent(percent + 1.5);
+
+    // Keep running until the average counts reach the target
+    while ((abs(left_encoder.Counts()) + abs(right_encoder.Counts())) / 2 < counts) {
+         // Keep running
+    }
+
+    // Turn off motors  
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
 void strafing(double inches, char direction) {
 
     double percent = 20.0;
@@ -304,7 +389,7 @@ void spinInPlace(int degrees, char direction) {
         left_motor.SetPercent((-1 * percent));
         front_motor.SetPercent((-1 * percent) - 10);
 
-        Sleep(0.008056 * degrees);
+        Sleep(0.008076 * degrees);
 
         //Turn off motors
         right_motor.Stop();
@@ -313,10 +398,10 @@ void spinInPlace(int degrees, char direction) {
     }
     if (direction == 'r') {
         right_motor.SetPercent(percent);
-        left_motor.SetPercent(percent);
+        left_motor.SetPercent(percent + 1.5);
         front_motor.SetPercent(percent + 10);
 
-        Sleep(0.008056 * degrees);
+        Sleep(0.008091 * degrees);
 
         //Turn off motors
         right_motor.Stop();
