@@ -20,7 +20,7 @@ DigitalEncoder left_encoder(FEHIO::Pin14);
 FEHMotor front_motor(FEHMotor::Motor2, 9.0);
 DigitalEncoder front_encoder(FEHIO::Pin8);
 
-FEHServo arm_servo_RT(FEHServo::Servo2);
+FEHServo arm_servo_RT(FEHServo::Servo7);
 FEHServo arm_servo_ARM(FEHServo::Servo4);
 
 //declare the methods
@@ -31,14 +31,13 @@ void spinInPlace(int degrees, char direction);
 
 void ERCMain()
 { 
-    //rcs code and receive the correct lever
-    RCS.InitializeTouchMenu("1130D9ZBH");
-    int correctLever = RCS.GetLever();
-
     //set the initial degree to 0 as the default position
     arm_servo_ARM.SetDegree(0.0);
 
-    //cds cell initializing the starting voltage value 
+    //rcs code and receive the correct lever
+    RCS.InitializeTouchMenu("1130D9ZBH");
+
+    // cds cell initializing the starting voltage value 
     int count = 0;
     float volt = cds.Value();
     
@@ -56,27 +55,38 @@ void ERCMain()
    
     //drive backward to hit the final button
     drive(2, 'b'); 
-    Sleep(0.5);
+    Sleep(0.2);
 
     //drive forward from the final button
     drive(2, 'f'); 
+    Sleep(0.2);
+
+    //turn the robot 130 degrees right to face the spinner toward the compost drum
+    spinInPlace(45, 'r');
+    Sleep(0.2);
+
+    strafing(4, 'l');
+    Sleep(0.2);
+
+    drive(8, 'b');
     Sleep(0.5);
 
-    //turn the robot 129 degrees right to face the spinner toward the compost drum
-    spinInPlace(126, 'r');
-    Sleep(0.5);
+    drive(1.25, 'f');
+    Sleep(0.2);
 
-    //drive backward 4 inches toward composter
-    drive(4, 'b'); 
-    Sleep(0.5);
-    
-    //strafe 5.17 inches right to align close to the wall
-    strafing(5.17, 'r');
-    Sleep(0.5);
+    spinInPlace(92, 'r');
+    Sleep(0.2);
 
     //drive 10.5 inches backward to flush the spinner to the drum
-    drive(10.5, 'b'); 
-    Sleep(0.5);
+    drive(5, 'b'); 
+    Sleep(0.2);
+
+    strafing(0.35, 'r');
+    Sleep(0.2);
+
+    //drive 10.5 inches backward to flush the spinner to the drum
+    drive(5.5, 'b'); 
+    Sleep(0.2);
 
     arm_servo_RT.SetDegree(135);
     Sleep(1.5);
@@ -85,19 +95,18 @@ void ERCMain()
     Sleep(1.5);
     
     arm_servo_RT.Off();
-    Sleep(0.5);
 
     //drive forward 2 inches away from the drum
     drive(2, 'f');
-    Sleep(0.5);
+    Sleep(0.2);
 
     //strafe left to position the robot parallel to the apple basket
-    strafing(21, 'l');
-    Sleep(0.5);
+    strafing(19.95, 'l');
+    Sleep(0.2);
 
     //spin the robot 180 degrees to face the arm toward the basket
     spinInPlace(183, 'r');
-    Sleep(0.5);
+    Sleep(0.2);
 
     //set the degree of the front arm to 126 to position the arm for the apple basket handle
     arm_servo_ARM.SetDegree(126.0);
@@ -105,146 +114,347 @@ void ERCMain()
 
     //drive forward to position hook under the apple basket handle
     drive(5.75, 'f');
-    Sleep(0.5);
+    Sleep(0.2);
 
     //set the arm degree to 70 (upward) to lift basket
     arm_servo_ARM.SetDegree(70);
     Sleep(1.0);
 
+    drive(2, 'b');
+    Sleep(0.2);
+
     //strafe left to begin aligning with the ramp
     strafing(8.25, 'l');
-    Sleep(0.5);
+    Sleep(0.2);
 
-    //spin in place 90 degrees to face the front of the robot toward the ramp
-    spinInPlace(90, 'r');
-    Sleep(0.5);
+    drive(25, 'b');
+    Sleep(0.3);
 
-    //strafe right so the robot is in front of the ramp
-    strafing(19.0, 'r');
-    Sleep(0.5);
+    drive(3, 'f');
+    Sleep(0.2);
+
+    spinInPlace(97, 'r');
+    Sleep(0.2);
 
     //drive up the ramp to the apple basket table
-    driveApples(33.75);
+    driveApples(29.75);
+    Sleep(0.2);
+
+    strafing(1, 'l');
+    Sleep(0.2);
+
+    spinInPlace(96, 'l');
+    Sleep(0.2);
+
+    drive(10, 'b');
     Sleep(0.5);
 
-    spinInPlace(30, 'r');
-    Sleep(2.0);
+    drive(2, 'f');
+    Sleep(0.2);
 
-    drive(0.25, 'f');
-    Sleep(0.5);
+    spinInPlace(96, 'r');
+    Sleep(0.2);
 
+    //drive rest of way up the ramp to the apple basket table
+    driveApples(7);
+    Sleep(0.2);
+
+
+    drive(1, 'b');
+    Sleep(0.2);
+
+    spinInPlace(22, 'r');
+    Sleep(0.2);
+
+    drive(1, 'f');
+    Sleep(1.0);
 
     //set the degree of the robot to 97 to deposit it
-    arm_servo_ARM.SetDegree(97.0);
-    Sleep(0.5);
+    arm_servo_ARM.SetDegree(94.0);
+    drive(1.25, 'b');
+    Sleep(0.2);
 
-    drive(2.25, 'b');
-    Sleep(0.5);
-
-    spinInPlace(30, 'l');
-    Sleep(0.5);
+    spinInPlace(22, 'l');
 
     arm_servo_ARM.SetDegree(0);
-    Sleep(0.5);
+    Sleep(0.2);
 
-    strafing(2, 'r');
-    Sleep(0.5);
+    strafing(1.5, 'l');
+    Sleep(0.2);
 
     // START OF CODE FOR THE TASKS ABOVE THE RAMP
     //drive backward away from the table
     drive(7, 'b');
-    Sleep(0.5);
+    Sleep(0.2);
 
-    //strafe left to move away from the table
-    strafing(2.5, 'l');
-    Sleep(0.5);
 
     //set the degree of the arm to 140 to posiiton it for the window
     arm_servo_ARM.SetDegree(140.0);
-    Sleep(0.5);
+    Sleep(0.2);
 
     //turn left 90 degrees to move the arm at the same level as the window handle
-    spinInPlace(101, 'l');
-    Sleep(0.5);
+    spinInPlace(89, 'l');
+    Sleep(0.2);
+
+    drive(8, 'b');
+    Sleep(0.2);
+
+    drive(0.75, 'f');
+    Sleep(0.2);
+
+    strafing(1.15, 'l');
+    Sleep(0.2);
 
     //drive forward to close window
-    drive(7, 'f');
-    Sleep(0.5);
+    drive(3.5, 'f');
+    Sleep(0.2);
+
+    strafing(0.45, 'l');
+    Sleep(0.2);
+
+    drive(6, 'f');
+    Sleep(0.2);
+
 
     //strafe right to reposition the arm outside the front handle
-    strafing(3, 'r');
-    Sleep(0.5);
+    strafing(3.35, 'r');
+    Sleep(0.2);
 
     //drive forward
     drive(2, 'f');
-    Sleep(0.5);
+    Sleep(0.2);
 
     //strafe left to position arm behind handle 
-    strafing(2, 'l');
-    Sleep(0.5);
+    strafing(3, 'l');
+    Sleep(0.2);
 
     //move backward to open window again
     drive(6.5, 'b');
-    Sleep(0.5);
+    Sleep(0.2);
+
+    // drive(0.25, 'f');
+    // Sleep(0.2);
+
+    // strafing(0.3, 'l');
+    // Sleep(0.2);
+
+    // //move backward to open window again
+    // drive(3, 'b');
+    // Sleep(0.2);
 
     //strafe right to align with center line in front of humidifer
-    strafing(7.25, 'r');
-    Sleep(0.5);
+    strafing(2, 'r');
+    Sleep(0.2);
 
     //set arm to default position
     arm_servo_ARM.SetDegree(0.0);
+    Sleep(0.2);
+
+    drive(10, 'b');
+    Sleep(0.2);
+
+    drive(1, 'f');
+    Sleep(0.2);
+
+    strafing(4, 'r');
+    Sleep(0.2);
+
+    drive(4, 'b');
     Sleep(0.5);
 
-    //drive forward to align CdS cell with sensor
-    drive(11, 'f');
-    Sleep(0.5);
+    drive(18.0, 'f');
+    Sleep(0.5); 
    
     //attempt to read blue or red light value from the cds cell sensor
     //print message to the screen
-    String light;
+    String light="";
     volt = cds.Value();
     count = 0;
+    strafing(0.75, 'r');
     while (!light.equals("blue") && !light.equals("red")) {
        volt = cds.Value();
+       LCD.WriteAt(volt, 200, 100);
        Sleep(0.1);
        count++;
-       if (volt > 0.3 && volt < 0.6) {
-            light = "blue";
-            LCD.Write(light);
-       }
-       else if (volt < 0.25) {
+
+       if (volt < 0.5) {
             light = "red";
-            LCD.Write(light);
+            // strafe sideways to the right
+            strafing(1.5, 'r');
+            Sleep(0.5);
+            //drive forward to hit button
+            drive(5, 'f');
+
+            Sleep(0.5);
+
+            drive(5, 'b');
+            Sleep(0.5);
+            strafing(1.5, 'l');
        }
+    //    else if (volt > 0.60 && volt < 1.1) {
+    //         light = "blue";
+    //         strafing(1.5, 'l');
+    //         Sleep(0.5);
+    //         //drive forward to hit button
+    //         drive(5, 'f');
+
+    //         Sleep(0.5);
+
+    //         drive(5, 'b');
+    //         Sleep(0.5);
+    //         strafing(1.5, 'r');
+           
+    //         //drive forward to hit button
+            
+    //    }
        else if (count >= 30) {
-            if (volt < 0.25) {
-                light = "red";
-            }
-            else {
-                light = "blue";
-            }
-            LCD.Write("3 seconds have passed: ");
-            LCD.Write(light);
+            //choose blue by randomness
+
+            light = "blue";
+            strafing(2.25, 'l');
+            Sleep(0.5);
+            //drive forward to hit button
+            drive(5, 'f');
+
+            Sleep(0.5);
+
+            drive(5, 'b');
+            Sleep(0.5);
+            strafing(1.5, 'r');
+            
        }
     }
 
-    if (light.equals("blue")) {
-        // strafe sideways to the left
-        strafing(2, 'l');
+    Sleep(0.2);
+
+    strafing(9, 'r');
+    Sleep(0.2);
+
+    spinInPlace(45, 'r');
+    Sleep(0.2);
+
+    drive(2, 'b');
+    Sleep(0.2);
+
+    int correctLever = RCS.GetLever();
+    LCD.WriteAt(correctLever, 150, 150);
+    if (correctLever == 0){
+        strafing(3.5, 'l');
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(160);
         Sleep(0.5);
-        //drive forward to hit button
+
+        drive(5, 'b');
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.5);
+
         drive(5, 'f');
+
+        Sleep(4.0);
+
+        arm_servo_ARM.SetDegree(140);
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.2);
+
+        // code to put it back to a centralized spot
+
+        drive(8, 'b');
+        Sleep(0.2);
+
+        strafing(5, 'r');
+        Sleep(0.2);
+
+    }
+    else if (correctLever == 1){
+        arm_servo_ARM.SetDegree(160);
+        Sleep(0.5);
+
+        drive(5, 'b');
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.5);
+
+        drive(5, 'f');
+
+        Sleep(4.0);
+
+        arm_servo_ARM.SetDegree(140);
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.2);
+
+        // code to put it back to a centralized spot
+
+        drive(8, 'b');
+        Sleep(0.2);
+
     }
     else {
-        // strafe sideways to the right
-        strafing(2, 'r');
+        strafing(4.5, 'r');
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(160);
         Sleep(0.5);
-        //drive forward to hit button
+
+        drive(5, 'b');
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.5);
+
         drive(5, 'f');
+
+        Sleep(4.0);
+
+        arm_servo_ARM.SetDegree(140);
+        Sleep(0.2);
+
+        arm_servo_ARM.SetDegree(170);
+        Sleep(0.2);
+
+        // code to put it back to a centralized spot
+
+        drive(8, 'b');
+        Sleep(0.2);
+
+        strafing(5, 'l');
+        Sleep(0.2);
+
     }
 
-    
+    arm_servo_ARM.SetDegree(0);
+    Sleep(0.2);
 
+    spinInPlace(45, 'l');
+    Sleep(0.2);
+
+    strafing(6, 'l');
+    Sleep(0.2);
+
+    drive(20, 'b');
+    Sleep(0.5);
+
+    drive(3, 'f');
+    Sleep(0.2);
+
+    spinInPlace(90, 'l');
+    Sleep(0.2);
+
+    drive(33, 'f');
+    Sleep(0.2);
+
+    strafing(6, 'l');
+    Sleep(0.2);
+
+    drive(5, 'f');
+    Sleep(0.5);
 
 
 }
@@ -261,11 +471,11 @@ void drive(double inches, char direction)
         counts =  inches * 33.94;
         left_motor.SetPercent(percent+2.5);
         percent = (percent * -1);
-        right_motor.SetPercent(percent);
+        right_motor.SetPercent(percent-1);
     }
     else {
         counts =  inches * 34.57;
-        right_motor.SetPercent(percent);
+        right_motor.SetPercent(percent+0.5);
         percent = (percent * -1);
         left_motor.SetPercent(percent-2.5);
     }
@@ -291,7 +501,7 @@ void driveApples(double inches)
     counts =  inches * 33.94;
     left_motor.SetPercent(percent);
     percent = (percent * -1);
-    right_motor.SetPercent(percent - 1.5);
+    right_motor.SetPercent(percent - 2.5);
 
     // Keep running until the average counts reach the target
     while ((abs(left_encoder.Counts()) + abs(right_encoder.Counts())) / 2 < counts) {
@@ -320,7 +530,7 @@ void strafing(double inches, char direction) {
     }
     else {
         right_motor.SetPercent(percent + 1);
-        left_motor.SetPercent(percent);
+        left_motor.SetPercent(percent + 1);
         front_motor.SetPercent((-1 * percent) - 19);
     }
 
@@ -342,7 +552,7 @@ void spinInPlace(int degrees, char direction) {
         left_motor.SetPercent((-1 * percent));
         front_motor.SetPercent((-1 * percent) - 10);
 
-        Sleep(0.008076 * degrees);
+        Sleep(0.008276 * degrees);
 
         //Turn off motors
         right_motor.Stop();
@@ -354,7 +564,7 @@ void spinInPlace(int degrees, char direction) {
         left_motor.SetPercent(percent + 1.5);
         front_motor.SetPercent(percent + 10);
 
-        Sleep(0.008091 * degrees);
+        Sleep(0.008000 * degrees);
 
         //Turn off motors
         right_motor.Stop();
